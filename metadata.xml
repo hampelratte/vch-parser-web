@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iPOJO>
+	<instance component="de.berlios.vch.parser.web.Activator" name="vch.web.parser" />
+    <instance component="de.berlios.vch.parser.web.BrowseServlet" name="vch.web.parser.servlet" />
+    <instance component="de.berlios.vch.parser.web.WatchWebAction" name="vch.web.parser.action.watch" />
+    <instance component="de.berlios.vch.parser.web.OpenWebAction" name="vch.web.parser.action.open" />
+</iPOJO>

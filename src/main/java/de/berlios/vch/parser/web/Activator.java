@@ -31,9 +31,9 @@ import de.berlios.vch.web.menu.WebMenuEntry;
 @Provides
 public class Activator implements ResourceBundleProvider {
 
-    private Map<String, ServiceRegistration> registrations = new HashMap<String, ServiceRegistration>();
+    private Map<String, ServiceRegistration<IWebMenuEntry>> registrations = new HashMap<String, ServiceRegistration<IWebMenuEntry>>();
 
-    private ServiceTracker parserTracker;
+    private ServiceTracker<IWebParser, IWebParser> parserTracker;
 
     private BundleContext ctx;
 
@@ -52,10 +52,10 @@ public class Activator implements ResourceBundleProvider {
     }
 
     private void openParserTracker(final BundleContext ctx) {
-        parserTracker = new ServiceTracker(ctx, IWebParser.class.getName(), null) {
+        parserTracker = new ServiceTracker<IWebParser, IWebParser>(ctx, IWebParser.class, null) {
             @Override
-            public Object addingService(ServiceReference reference) {
-                IWebParser parser = (IWebParser) ctx.getService(reference);
+            public IWebParser addingService(ServiceReference<IWebParser> reference) {
+                IWebParser parser = ctx.getService(reference);
                 IWebMenuEntry parserEntry = new WebMenuEntry(getResourceBundle().getString("I18N_BROWSE"));
                 parserEntry.setLinkUri("#");
                 parserEntry.setPreferredPosition(Integer.MIN_VALUE + 1);
@@ -68,18 +68,18 @@ public class Activator implements ResourceBundleProvider {
 
                 Dictionary<String, String> options = new Hashtable<String, String>();
                 options.put("vch.parser", parser.getClass().getName());
-                ServiceRegistration reg = ctx.registerService(IWebMenuEntry.class.getName(), parserEntry, options);
+                ServiceRegistration<IWebMenuEntry> reg = ctx.registerService(IWebMenuEntry.class, parserEntry, options);
                 registrations.put(parser.getClass().getName(), reg);
 
                 return super.addingService(reference);
             }
 
             @Override
-            public void removedService(ServiceReference reference, Object service) {
-                ServiceRegistration reg = registrations.get(service.getClass().getName());
+            public void removedService(ServiceReference<IWebParser> reference, IWebParser service) {
+                ServiceRegistration<IWebMenuEntry> reg = registrations.get(service.getClass().getName());
                 registrations.remove(service.getClass().getName());
                 if (reg != null) {
-                    IWebMenuEntry menu = (IWebMenuEntry) ctx.getService(reg.getReference());
+                    IWebMenuEntry menu = ctx.getService(reg.getReference());
                     logger.log(LogService.LOG_INFO, "Unregistering web menu entry \n " + createMenuTree(menu, ""));
                     reg.unregister();
                 }
@@ -107,7 +107,7 @@ public class Activator implements ResourceBundleProvider {
             parserTracker.close();
         }
 
-        for (ServiceRegistration reg : registrations.values()) {
+        for (ServiceRegistration<IWebMenuEntry> reg : registrations.values()) {
             reg.unregister();
         }
     }

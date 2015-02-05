@@ -256,7 +256,7 @@ public class BrowseServlet extends VchHttpServlet {
     private List<IWebAction> getWebActions() {
         List<IWebAction> actions = new LinkedList<IWebAction>();
 
-        ServiceTracker actionsTracker = new ServiceTracker(ctx, IWebAction.class.getName(), null);
+        ServiceTracker<IWebAction, IWebAction> actionsTracker = new ServiceTracker<IWebAction, IWebAction>(ctx, IWebAction.class, null);
         actionsTracker.open();
         Object[] services = actionsTracker.getServices();
         actionsTracker.close();

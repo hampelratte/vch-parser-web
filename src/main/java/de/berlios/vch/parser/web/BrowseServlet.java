@@ -122,7 +122,7 @@ public class BrowseServlet extends VchHttpServlet {
                     // error(resp, HttpServletResponse.SC_PRECONDITION_FAILED, msg, true);
                 } catch (Exception e) {
                     logger.log(LogService.LOG_ERROR, "Couldn't load page", e);
-                    throw new ServletException(e);
+                    throw new ServletException(e.getLocalizedMessage(), e);
                     // error(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage(), true);
                 }
             } else {

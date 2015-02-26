@@ -2047,7 +2047,8 @@
 							},
 							'error'		: function (xhttp, textStatus, errorThrown) { 
 								callback.call(null, false);
-								tree.error(errorThrown + " " + textStatus); 
+								//tree.error(errorThrown + " " + textStatus); 
+								tree.error(xhttp.status + ' - ' + xhttp.responseText);
 							}
 						});
 					}

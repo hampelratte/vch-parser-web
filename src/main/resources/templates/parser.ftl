@@ -49,7 +49,7 @@
                     if(attributes.vchpubDate) {
                         var date = new Date();
                         date.setTime(attributes.vchpubDate);
-                        html += date.toLocaleFormat('%d.%m.%Y %H:%M');
+                        html += date.toLocaleDateString(); // '%d.%m.%Y %H:%M'
                     }
                     
                     if(attributes.vchpubDate && attributes.vchduration) {
